@@ -14,7 +14,8 @@ def search_songs():
 
 @app.route('/home', methods=['GET'])
 def get_home():
-    home_content = ytmusic.get_home()
+    country = 'IN'  # Set country code to India (IN)
+    home_content = ytmusic.get_home(country=country)
     return jsonify(home_content)
 
 if __name__ == '__main__':
