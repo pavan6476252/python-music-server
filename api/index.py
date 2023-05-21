@@ -14,9 +14,21 @@ def search_songs():
 
 @app.route('/home', methods=['GET'])
 def get_home():
-    country = 'IN'  # Set country code to India (IN)
-    home_content = ytmusic.get_home(country=country)
+    home_content = ytmusic.get_home()
     return jsonify(home_content)
+
+@app.route('/charts', methods=['GET'])
+def get_home():
+    query = request.args.get('query')
+    home_content = ytmusic.get_charts(country=query)
+    return jsonify(home_content)
+
+@app.route('/playlist', methods=['GET'])
+def get_home():
+    query = request.args.get('query')
+    home_content = ytmusic.get_playlist(playlistId=query)
+    return jsonify(home_content)
+
 
 if __name__ == '__main__':
     app.run()
