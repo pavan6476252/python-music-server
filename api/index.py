@@ -12,19 +12,15 @@ app = Flask(__name__)
 ytmusic = YTMusic()
 
 
+@app.route("/home")
+def home():
+    limit = int(request.args.get("limit", 3))
+    search_results = ytmusic.get_home(limit=limit)
+    return jsonify(search_results)
+
 @app.route("/search")
 def search():
-    """
-    Search for songs, videos, albums, and playlists.
-
-    Parameters:
-    - `query` (str): The search query.
-    - `filter` (str): Optional. The filter for the search results. Default is None.
-    - `limit` (int): Optional. The maximum number of results to retrieve. Default is 20.
-
-    Returns:
-    - JSON object: The search results.
-    """
+    
     query = request.args.get("query")
     filter = request.args.get("filter")
     limit = int(request.args.get("limit", 20))
@@ -33,213 +29,95 @@ def search():
 
 @app.route("/suggestions")
 def suggestions():
-    """
-    Get search suggestions based on a query.
-
-    Parameters:
-    - `query` (str): The search query.
-
-    Returns:
-    - JSON object: The search suggestions.
-    """
+     
     query = request.args.get("query")
-    suggestions = ytmusic.suggestions(query)
+    suggestions = ytmusic.get_search_suggestions(query=query)
     return jsonify(suggestions)
 
 @app.route("/get_artist")
 def get_artist():
-    """
-    Get artist information.
-
-    Parameters:
-    - `artist_id` (str): The ID of the artist.
-
-    Returns:
-    - JSON object: The artist information.
-    """
-    artist_id = request.args.get("artist_id")
-    artist = ytmusic.get_artist(artist_id)
+   
+    id = request.args.get("channelId")
+    artist = ytmusic.get_artist(channelId=id)
     return jsonify(artist)
 
 @app.route("/get_artist_releases")
 def get_artist_releases():
-    """
-    Get releases (songs, videos, albums, singles) for an artist.
-
-    Parameters:
-    - `artist_id` (str): The ID of the artist.
-
-    Returns:
-    - JSON object: The artist releases.
-    """
-    artist_id = request.args.get("artist_id")
-    releases = ytmusic.get_artist_albums(artist_id)
+    
+    params = request.args.get("params")
+    channelId = request.args.get("channelId")
+    releases = ytmusic.get_artist_albums(channelId=channelId,params=params)
     return jsonify(releases)
 
 @app.route("/get_user_info")
 def get_user_info():
-    """
-    Get user information.
-
-    Parameters:
-    - `user_id` (str): The ID of the user.
-
-    Returns:
-    - JSON object: The user information.
-    """
-    user_id = request.args.get("user_id")
-    user_info = ytmusic.get_user(user_id)
+  
+    channelId = request.args.get("channelId")
+    user_info = ytmusic.get_user(channelId=channelId)
     return jsonify(user_info)
 
 @app.route("/get_album")
 def get_album():
-    """
-    Get album information.
-
-    Parameters:
-    - `album_id` (str): The ID of the album.
-
-    Returns:
-    - JSON object: The album information.
-    """
-    album_id = request.args.get("album_id")
-    album = ytmusic.get_album(album_id)
+   
+    browseId = request.args.get("browseId")
+    album = ytmusic.get_album(browseId=browseId)
     return jsonify(album)
 
 @app.route("/get_song")
 def get_song():
-    """
-    Get song metadata.
-
-    Parameters:
-    - `video_id` (str): The ID of the song video.
-
-    Returns:
-    - JSON object: The song metadata.
-    """
-    video_id = request.args.get("video_id")
-    song = ytmusic.get_song(video_id)
+    video_id = request.args.get("videoId")
+    song = ytmusic.get_song(videoId=video_id)
     return jsonify(song)
 
 @app.route("/get_watch_playlists")
 def get_watch_playlists():
-    """
-    Get watch playlists (next songs when you press play/radio/shuffle).
-
-    Parameters:
-    - `video_id` (str): The ID of the video.
-
-    Returns:
-    - JSON object: The watch playlists.
-    """
-    video_id = request.args.get("video_id")
-    playlists = ytmusic.get_watch_playlist(video_id)
+    
+    playlistId = request.args.get("playlistId",default=None)
+    videoId = request.args.get("videoId",default=None)
+    limit = int(request.args.get("limit",default=25))
+    playlists = ytmusic.get_watch_playlist(playlistId=playlistId,videoId=videoId,limit=limit)
     return jsonify(playlists)
 
 @app.route("/get_song_lyrics")
 def get_song_lyrics():
-    """
-    Get song lyrics.
-
-    Parameters:
-    - `video_id` (str): The ID of the song video.
-
-    Returns:
-    - JSON object: The song lyrics.
-    """
-    video_id = request.args.get("video_id")
-    lyrics = ytmusic.get_lyrics(video_id)
+    # browseId: Lyrics browse id obtained from get_watch_playlist
+    lyricsId = request.args.get("lyricsId")
+    lyrics = ytmusic.get_lyrics(browseId=lyricsId)
     return jsonify(lyrics)
 
 @app.route("/get_mood_playlists")
 def get_mood_playlists():
-    """
-    Get playlists associated with a specific mood.
-
-    Parameters:
-    - `mood_id` (str): The ID of the mood.
-
-    Returns:
-    - JSON object: The mood playlists.
-    """
-    mood_id = request.args.get("mood_id")
-    playlists = ytmusic.get_mood_playlists(mood_id)
+  
+    mood_id = request.args.get("moodId")
+    playlists = ytmusic.get_mood_playlists(params=mood_id)
     return jsonify(playlists)
 
-@app.route("/get_genre_playlists")
+@app.route("/get_basejs_url")
 def get_genre_playlists():
-    """
-    Get playlists associated with a specific genre.
-
-    Parameters:
-    - `genre_id` (str): The ID of the genre.
-
-    Returns:
-    - JSON object: The genre playlists.
-    """
-    genre_id = request.args.get("genre_id")
-    playlists = ytmusic.get_genre_playlists(genre_id)
+    playlists = ytmusic.get_basejs_url()
     return jsonify(playlists)
-
-@app.route("/get_charts")
-def get_charts():
-    """
-    Get the latest charts globally.
-
-    Parameters:
-    - `region_code` (str): Optional. The region code for the charts. Default is None.
-
-    Returns:
-    - JSON object: The global charts.
-    """
-    region_code = request.args.get("region_code")
-    charts = ytmusic.get_charts(region_code=region_code)
-    return jsonify(charts)
 
 @app.route("/get_country_charts")
 def get_country_charts():
-    """
-    Get the latest charts for a specific country.
-
-    Parameters:
-    - `country_code` (str): The two-letter country code.
-
-    Returns:
-    - JSON object: The country charts.
-    """
-    country_code = request.args.get("country_code")
-    charts = ytmusic.get_charts(region_code=country_code)
+    country_code = request.args.get("countryCode",default='ZZ')
+    charts = ytmusic.get_charts(country=country_code)
     return jsonify(charts)
 
-@app.route("/get_playlist_contents")
+@app.route("/get_playlist")
 def get_playlist_contents():
-    """
-    Get the contents (songs, videos) of a playlist.
-
-    Parameters:
-    - `playlist_id` (str): The ID of the playlist.
-
-    Returns:
-    - JSON object: The playlist contents.
-    """
-    playlist_id = request.args.get("playlist_id")
-    contents = ytmusic.get_playlist(playlist_id)
+    playlistId = request.args.get("playlistId")
+    limit =int(request.args.get("limit",default=25))
+    suggestionsLimit =int(request.args.get("suggestionsLimit",default=0))
+    contents = ytmusic.get_playlist(playlistId=playlistId,limit=limit, related =True,   suggestions_limit= suggestionsLimit)
     return jsonify(contents)
 
-@app.route("/get_playlist_suggestions")
+@app.route("/get_library_playlists")
 def get_playlist_suggestions():
-    """
-    Get suggestions (recommended songs, videos) for a playlist.
-
-    Parameters:
-    - `playlist_id` (str): The ID of the playlist.
-
-    Returns:
-    - JSON object: The playlist suggestions.
-    """
-    playlist_id = request.args.get("playlist_id")
-    suggestions = ytmusic.get_playlist_suggestions(playlist_id)
+   
+    limit =int(request.args.get("limit",default=25))
+    suggestions = ytmusic.get_library_playlists(limit=limit)
     return jsonify(suggestions)
+
 
 if __name__ == "__main__":
     app.run()

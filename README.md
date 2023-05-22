@@ -7,333 +7,221 @@ This document provides an overview of the available routes and their usage for t
 https://python-music-server.vercel.app/
 ```
 
-### Search
+## Home
 
-- **Endpoint:** `/search`
-- **Method:** GET
-```
-    Search for songs, videos, albums, and playlists.
+**Endpoint:** `/home`
 
-    Parameters:
-    - `query` (str): The search query.
-    - `filter` (str): Optional. The filter for the search results. Default is None.
-    - `limit` (int): Optional. The maximum number of results to retrieve. Default is 20.
+Retrieves home search results.
 
-    Returns:
-    - JSON object: The search results.
-```
+**Parameters:**
+- `limit` (optional, int): The maximum number of results to retrieve. Default is 3.
 
-#### Parameters
-
-- `query` (str): The search query.
-- `filter` (str, optional): The filter for the search results. Default is None.
-- `limit` (int, optional): The maximum number of results to retrieve. Default is 20.
-
-#### Returns
-
+**Returns:**
 - JSON object: The search results.
 
-### Suggestions
+---
 
-- **Endpoint:** `/suggestions`
-- **Method:** GET
+## Search
 
-    ```
-    Get search suggestions based on a query.
+**Endpoint:** `/search`
 
-    Parameters:
-    - `query` (str): The search query.
+Searches for songs, videos, albums, and playlists.
 
-    Returns:
-    - JSON object: The search suggestions.
-    ```
+**Parameters:**
+- `query` (str): The search query.
+- `filter` (optional, str): The filter for the search results. Default is None.
+- `limit` (optional, int): The maximum number of results to retrieve. Default is 20.
 
-#### Parameters
+**Returns:**
+- JSON object: The search results.
 
+---
+
+## Suggestions
+
+**Endpoint:** `/suggestions`
+
+Gets search suggestions based on a query.
+
+**Parameters:**
 - `query` (str): The search query.
 
-#### Returns
-
+**Returns:**
 - JSON object: The search suggestions.
 
-### Get Artist
+---
 
-- **Endpoint:** `/get_artist`
-- **Method:** GET
+## Get Artist
 
-    ```
-    Get artist information.
+**Endpoint:** `/get_artist`
 
-    Parameters:
-    - `artist_id` (str): The ID of the artist.
+Retrieves artist information.
 
-    Returns:
-    - JSON object: The artist information.
-    ```
+**Parameters:**
+- `channelId` (str): The ID of the artist's channel.
 
-#### Parameters
-
-- `artist_id` (str): The ID of the artist.
-
-#### Returns
-
+**Returns:**
 - JSON object: The artist information.
 
-### Get Artist Releases
+---
 
-- **Endpoint:** `/get_artist_releases`
-- **Method:** GET
+## Get Artist Releases
 
-```
-    Get releases (songs, videos, albums, singles) for an artist.
+**Endpoint:** `/get_artist_releases`
 
-    Parameters:
-    - `artist_id` (str): The ID of the artist.
+Retrieves releases (songs, videos, albums, singles) for an artist.
 
-    Returns:
-    - JSON object: The artist releases.
-```
+**Parameters:**
+- `channelId` (str): The ID of the artist's channel.
+- `params` (optional, str): Additional parameters for filtering releases. Default is None.
 
-#### Parameters
-
-- `artist_id` (str): The ID of the artist.
-
-#### Returns
-
+**Returns:**
 - JSON object: The artist releases.
 
-### Get User Info
+---
 
-- **Endpoint:** `/get_user_info`
-- **Method:** GET
-```
-    Get user information.
+## Get User Info
 
-    Parameters:
-    - `user_id` (str): The ID of the user.
+**Endpoint:** `/get_user_info`
 
-    Returns:
-    - JSON object: The user information.
-```
+Retrieves user information.
 
-#### Parameters
+**Parameters:**
+- `channelId` (str): The ID of the user's channel.
 
-- `user_id` (str): The ID of the user.
-
-#### Returns
-
+**Returns:**
 - JSON object: The user information.
 
-### Get Album
+---
 
-- **Endpoint:** `/get_album`
-- **Method:** GET
-```
-    Get album information.
+## Get Album
 
-    Parameters:
-    - `album_id` (str): The ID of the album.
+**Endpoint:** `/get_album`
 
-    Returns:
-    - JSON object: The album information.
-```
-#### Parameters
+Retrieves album information.
 
-- `album_id` (str): The ID of the album.
+**Parameters:**
+- `browseId` (str): The ID of the album.
 
-#### Returns
-
+**Returns:**
 - JSON object: The album information.
 
-### Get Song
+---
 
-- **Endpoint:** `/get_song`
-- **Method:** GET
-```
-    Get song metadata.
+## Get Song
 
-    Parameters:
-    - `video_id` (str): The ID of the song video.
+**Endpoint:** `/get_song`
 
-    Returns:
-    - JSON object: The song metadata.
-```
-#### Parameters
+Retrieves song metadata.
 
-- `video_id` (str): The ID of the song video.
+**Parameters:**
+- `videoId` (str): The ID of the song video.
 
-#### Returns
-
+**Returns:**
 - JSON object: The song metadata.
 
-### Get Watch Playlists
+---
 
-- **Endpoint:** `/get_watch_playlists`
-- **Method:** GET
-```
-    Get watch playlists (next songs when you press play/radio/shuffle).
+## Get Watch Playlists
 
-    Parameters:
-    - `video_id` (str): The ID of the video.
+**Endpoint:** `/get_watch_playlists`
 
-    Returns:
-    - JSON object: The watch playlists.
-```
-#### Parameters
+Retrieves watch playlists (next songs when you press play/radio/shuffle).
 
-- `video_id` (str): The ID of the video.
+**Parameters:**
+- `playlistId` (optional, str): The ID of the playlist. Default is None.
+- `videoId` (optional, str): The ID of the video. Default is None.
+- `limit` (optional, int): The maximum number of playlists to retrieve. Default is 25.
 
-#### Returns
-
+**Returns:**
 - JSON object: The watch playlists.
 
-### Get Song Lyrics
+---
 
-- **Endpoint:** `/get_song_lyrics`
-- **Method:** GET
-```
-    Get song lyrics.
+## Get Song Lyrics
 
-    Parameters:
-    - `video_id` (str): The ID of the song video.
+**Endpoint:** `/get_song_lyrics`
 
-    Returns:
-    - JSON object: The song lyrics.
-```
+Retrieves song lyrics.
 
-#### Parameters
+**Parameters:**
+- `lyricsId` (str): The ID of the song's lyrics.
 
-- `video_id` (str): The ID of the song video.
-
-#### Returns
-
+**Returns:**
 - JSON object: The song lyrics.
 
-### Get Mood Playlists
+---
 
-- **Endpoint:** `/get_mood_playlists`
-- **Method:** GET
-```
-    Get playlists associated with a specific mood.
+## Get Mood Playlists
 
-    Parameters:
-    - `mood_id` (str): The ID of the mood.
+**Endpoint:** `/get_mood_playlists`
 
-    Returns:
-    - JSON object: The mood playlists.
-```
-#### Parameters
+Retrieves playlists associated with a specific mood.
 
-- `mood_id` (str): The ID of the mood.
+**Parameters:**
+- `moodId` (str): The ID of the mood.
 
-#### Returns
-
+**Returns:**
 - JSON object: The mood playlists.
 
-### Get Genre Playlists
+---
 
-- **Endpoint:** `/get_genre_playlists`
-- **Method:** GET
-```
-    Get playlists associated with a specific genre.
+## Get BaseJS URL
 
-    Parameters:
-    - `genre_id` (str): The ID of the genre.
+**Endpoint:** `/get_basejs_url`
 
-    Returns:
-    - JSON object: The genre playlists.
-```
-#### Parameters
+Retrieves the BaseJS URL.
 
-- `genre_id` (str): The ID of the genre.
+**Returns:**
+- JSON object: The BaseJS URL.
 
-#### Returns
+---
 
-- JSON object: The genre playlists.
+## Get Country Charts
 
-### Get Charts
+**Endpoint:** `/get_country_charts`
 
-- **Endpoint:** `/get_charts`
-- **Method:** GET
-```
-Get the latest charts globally.
+Retrieves the charts for a specific country.
 
-    Parameters:
-    - `region_code` (str): Optional. The region code for the charts. Default is None.
+**Parameters:**
+- `countryCode` (optional, str): The country code. Default is 'ZZ' (global charts).
 
-    Returns:
-    - JSON object: The global charts.
-```
-#### Parameters
-
-- `region_code` (str, optional): The region code for the charts. Default is None.
-
-#### Returns
-
-- JSON object: The global charts.
-
-### Get Country Charts
-
-- **Endpoint:** `/get_country_charts`
-- **Method:** GET
-```
-specific country.
-
-    Parameters:
-    - `country_code` (str): The two-letter country code.
-
-    Returns:
-    - JSON object: The country charts.
-```
-#### Parameters
-
-- `country_code` (str): The two-letter country code.
-
-#### Returns
-
+**Returns:**
 - JSON object: The country charts.
 
-### Get Playlist Contents
+---
 
-- **Endpoint:** `/get_playlist_contents`
-- **Method:** GET
-```
-  Get the contents (songs, videos) of a playlist.
+## Get Playlist
 
-    Parameters:
-    - `playlist_id` (str): The ID of the playlist.
+**Endpoint:** `/get_playlist`
 
-    Returns:
-    - JSON object: The playlist contents.
-```
-#### Parameters
+Retrieves the contents of a playlist.
 
-- `playlist_id` (str): The ID of the playlist.
+**Parameters:**
+- `playlistId` (str): The ID of the playlist.
+- `limit` (optional, int): The maximum number of results to retrieve. Default is 25.
+- `suggestionsLimit` (optional, int): The maximum number of suggested videos to retrieve. Default is 0.
 
-#### Returns
-
+**Returns:**
 - JSON object: The playlist contents.
 
-### Get Playlist Suggestions
+---
 
-- **Endpoint:** `/get_playlist_suggestions`
-- **Method:** GET
-```Get suggestions (recommended songs, videos) for a playlist.
+## Get Library Playlists
 
-    Parameters:
-    - `playlist_id` (str): The ID of the playlist.
+**Endpoint:** `/get_library_playlists`
 
-    Returns:
-    - JSON object: The playlist suggestions.
-```
-#### Parameters
+Retrieves the playlists from the user's library.
 
-- `playlist_id` (str): The ID of the playlist.
+**Parameters:**
+- `limit` (optional, int): The maximum number of playlists to retrieve. Default is 25.
 
-#### Returns
+**Returns:**
+- JSON object: The library playlists.
 
-- JSON object: The playlist suggestions.
+---
 
-Make sure to install the required packages (`flask` and `ytmusicapi`) and run the application using Python.
+## Running the Application
 
-Remember to handle any potential errors or edge cases that may occur while making these requests, and customize the implementation as needed for your specific use case.
+The Flask application runs on the main thread using the `app.run()` method.
+
