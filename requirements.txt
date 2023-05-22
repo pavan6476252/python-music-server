@@ -1,3 +1,4 @@
 Flask==2.3.2
 ytmusicapi==1.0.2
 flask_cors==3.0.10
+markdown==3.4.3

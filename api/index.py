@@ -1,6 +1,7 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, render_template, request
 from ytmusicapi import YTMusic
 from flask_cors import CORS
+import markdown
 
 app = Flask(__name__)
 CORS(app)
@@ -10,6 +11,16 @@ from ytmusicapi import YTMusic
 
 app = Flask(__name__)
 ytmusic = YTMusic()
+
+@app.route("/")
+def index():
+    markdown_file_path = "./README.md"
+
+    with open(markdown_file_path, "r") as f:
+        content = f.read()
+        html_content = markdown.markdown(content)
+
+    return render_template("index.html", content=html_content)
 
 
 @app.route("/home")
