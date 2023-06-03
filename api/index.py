@@ -98,16 +98,10 @@ def get_song_lyrics():
 
 @app.route("/get_mood_playlists")
 def get_mood_playlists():
-  
     mood_id = request.args.get("moodId")
     playlists = ytmusic.get_mood_playlists(params=mood_id)
     return jsonify(playlists)
 
-@app.route("/get_mood_categories")
-def get_mood_playlists():
-  
-    playlists = ytmusic.get_mood_categories()
-    return jsonify(playlists)
 
 @app.route("/get_basejs_url")
 def get_genre_playlists():
@@ -134,6 +128,13 @@ def get_playlist_suggestions():
     limit =int(request.args.get("limit",default=25))
     suggestions = ytmusic.get_library_playlists(limit=limit)
     return jsonify(suggestions)
+
+
+@app.route("/get_mood_categories")
+def get_mood_categories():
+    data = ytmusic.get_mood_categories()
+    return jsonify(data)
+
 
 
 if __name__ == "__main__":
