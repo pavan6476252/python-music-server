@@ -103,6 +103,12 @@ def get_mood_playlists():
     playlists = ytmusic.get_mood_playlists(params=mood_id)
     return jsonify(playlists)
 
+@app.route("/get_mood_categories")
+def get_mood_playlists():
+  
+    playlists = ytmusic.get_mood_categories()
+    return jsonify(playlists)
+
 @app.route("/get_basejs_url")
 def get_genre_playlists():
     playlists = ytmusic.get_basejs_url()

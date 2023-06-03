@@ -166,6 +166,20 @@ Retrieves playlists associated with a specific mood.
 
 ---
 
+---
+## Get Moods 
+
+**Endpoint:** `/get_mood_categories`
+
+Retrieves get_mood_categories associated with a specific mood.
+
+**Parameter
+
+**Returns:**
+- JSON object: Fetch “Moods & Genres” categories from YouTube Music.
+
+---
+
 ## Get BaseJS URL
 
 **Endpoint:** `/get_basejs_url`
