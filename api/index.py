@@ -2,13 +2,13 @@ from flask import Flask, jsonify, render_template, request
 from ytmusicapi import YTMusic
 from flask_cors import CORS
 import markdown
-
-app = Flask(__name__)
-CORS(app)
 ytmusic = YTMusic()
 from flask import Flask, jsonify, request
 from ytmusicapi import YTMusic
 
+
+app = Flask(__name__)
+CORS(app)
 app = Flask(__name__)
 ytmusic = YTMusic()
 
@@ -16,7 +16,7 @@ ytmusic = YTMusic()
 def index():
     markdown_file_path = "./README.md"
 
-    with open(markdown_file_path, "r") as f:
+    with open(markdown_file_path, "r", encoding="utf-8") as f:
         content = f.read()
         html_content = markdown.markdown(content)
 
