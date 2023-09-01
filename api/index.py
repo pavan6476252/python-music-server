@@ -2,8 +2,19 @@
 from flask import Flask, jsonify, render_template, request
 from ytmusicapi import YTMusic
 from flask_cors import CORS
-import markdown
+import markdown 
+from pytube import YouTube 
+
+# ytmusic = YTMusic('oauth.json')
+
 ytmusic = YTMusic()
+
+
+
+app = Flask(__name__)
+CORS(app) 
+
+
 
 # app = Flask(__name__)
 # CORS(app)
@@ -12,8 +23,56 @@ ytmusic = YTMusic()
 #         "origins":"*"
 #     }
 # })
-app = Flask(__name__)
-CORS(app) 
+
+@app.route('/get_audio_urls', methods=['POST'])
+def get_audio_urls():
+    try:
+        data = request.get_json()
+        video_ids = data.get('video_ids', [])
+
+        audio_urls = {}
+
+        for video_id in video_ids:
+            try:
+                yt = YouTube(f"https://www.youtube.com/watch?v={video_id}")
+                audio_stream = yt.streams.filter(only_audio=True, file_extension='mp4').first()
+                audio_url = audio_stream.url if audio_stream else None
+
+                if audio_url:
+                    audio_urls[video_id] = audio_url
+                else:
+                    audio_urls[video_id] = None
+            except Exception as e:
+                audio_urls[video_id] = None
+
+        return jsonify(audio_urls), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# @app.route('/get_audio_url', methods=['GET'])
+# def get_audio_url():
+#     video_id = request.args.get('video_id')
+
+#     if not video_id:
+#         return jsonify({'error': 'Video ID parameter is missing'}), 400
+
+#     try:
+#         ydl_opts = {
+#             'format': 'bestaudio/best',
+#             'extractaudio': True,
+#             'audioformat': 'mp3',
+#             'outtmpl': 'downloads/%(id)s.%(ext)s',  # Download the audio file
+#         }
+
+#         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+#             info_dict = ydl.extract_info(f'https://www.youtube.com/watch?v={video_id}', download=False)
+#             audio_url = info_dict.get('url', '')
+
+#         return jsonify({'audio_url': audio_url}), 200
+
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
 
 
 @app.route("/")
@@ -29,7 +88,7 @@ def index():
 
 @app.route("/home")
 def home():
-    limit = int(request.args.get("limit", 3))
+    limit = int(request.args.get("limit", 12))
     search_results = ytmusic.get_home(limit=limit)
     return jsonify(search_results)
 
@@ -134,7 +193,7 @@ def get_country_charts():
 @app.route("/get_playlist")
 def get_playlist_contents():
     playlistId = request.args.get("playlistId")
-    limit = int(request.args.get("limit", default=25))
+    limit = int(request.args.get("limit", default=100))
     suggestionsLimit = int(request.args.get("suggestionsLimit", default=0))
     contents = ytmusic.get_playlist(
         playlistId=playlistId, limit=limit, related=True,   suggestions_limit=suggestionsLimit)

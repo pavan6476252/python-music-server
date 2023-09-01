@@ -6,7 +6,13 @@ This document provides an overview of the available routes and their usage for t
 ```javascript
 https://python-music-server.vercel.app/
 ```
+```
+https://python-music-server.vercel.app/get_audio_urls
 
+{
+    "video_ids": ["I1s7gC4HP4Y%26list=PLBB_MwfPi6EHMg1sq6_MIYHQfnBy9_ynF"]
+}
+```
 ## Home
 
 **Endpoint:** `/home`
