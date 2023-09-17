@@ -23,31 +23,31 @@ CORS(app)
 #     }
 # })
 
-@app.route('/get_audio_urls', methods=['POST'])
-def get_audio_urls():
-    try:
-        data = request.get_json()
-        video_ids = data.get('video_ids', [])
+# @app.route('/get_audio_urls', methods=['POST'])
+# def get_audio_urls():
+#     try:
+#         data = request.get_json()
+#         video_ids = data.get('video_ids', [])
 
-        audio_urls = {}
+#         audio_urls = {}
 
-        for video_id in video_ids:
-            try:
-                yt = YouTube(f"https://www.youtube.com/watch?v={video_id}")
-                audio_stream = yt.streams.filter(only_audio=True, file_extension='mp4').first()
-                audio_url = audio_stream.url if audio_stream else None
+#         for video_id in video_ids:
+#             try:
+#                 yt = YouTube(f"https://www.youtube.com/watch?v={video_id}")
+#                 audio_stream = yt.streams.filter(only_audio=True, file_extension='mp4').first()
+#                 audio_url = audio_stream.url if audio_stream else None
 
-                if audio_url:
-                    audio_urls[video_id] = audio_url
-                else:
-                    audio_urls[video_id] = None
-            except Exception as e:
-                audio_urls[video_id] = None
+#                 if audio_url:
+#                     audio_urls[video_id] = audio_url
+#                 else:
+#                     audio_urls[video_id] = None
+#             except Exception as e:
+#                 audio_urls[video_id] = None
 
-        return jsonify(audio_urls), 200
+#         return jsonify(audio_urls), 200
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
 
 # @app.route('/get_audio_url', methods=['GET'])
 # def get_audio_url():
