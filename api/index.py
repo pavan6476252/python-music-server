@@ -1,19 +1,14 @@
- 
+
+from pytube import YouTube
 from flask import Flask, jsonify, render_template, request
 from ytmusicapi import YTMusic
 from flask_cors import CORS
 import markdown
+
 ytmusic = YTMusic()
 
-# app = Flask(__name__)
-# CORS(app)
-# cors = CORS(app, resource={
-#     r"/*":{
-#         "origins":"*"
-#     }
-# })
 app = Flask(__name__)
-CORS(app) 
+CORS(app)
 
 
 @app.route("/")
@@ -30,8 +25,11 @@ def index():
 @app.route("/home")
 def home():
     limit = int(request.args.get("limit", 3))
-    search_results = ytmusic.get_home(limit=limit)
-    return jsonify(search_results)
+    try:
+        search_results = ytmusic.get_home(limit=limit)
+        return jsonify(search_results)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/search")
@@ -65,6 +63,7 @@ def get_artist_releases():
 
     params = request.args.get("params")
     channelId = request.args.get("channelId")
+    releases = ytmusic.get_artist_albums(channelId=channelId, params=params)
     releases = ytmusic.get_artist_albums(channelId=channelId, params=params)
     return jsonify(releases)
 
@@ -100,6 +99,12 @@ def get_watch_playlists():
     limit = int(request.args.get("limit", default=25))
     playlists = ytmusic.get_watch_playlist(
         playlistId=playlistId, videoId=videoId, limit=limit)
+
+    playlistId = request.args.get("playlistId", default=None)
+    videoId = request.args.get("videoId", default=None)
+    limit = int(request.args.get("limit", default=25))
+    playlists = ytmusic.get_watch_playlist(
+        playlistId=playlistId, videoId=videoId, limit=limit)
     return jsonify(playlists)
 
 
@@ -127,6 +132,7 @@ def get_genre_playlists():
 @app.route("/get_country_charts")
 def get_country_charts():
     country_code = request.args.get("countryCode", default='ZZ')
+    country_code = request.args.get("countryCode", default='ZZ')
     charts = ytmusic.get_charts(country=country_code)
     return jsonify(charts)
 
@@ -134,7 +140,7 @@ def get_country_charts():
 @app.route("/get_playlist")
 def get_playlist_contents():
     playlistId = request.args.get("playlistId")
-    limit = int(request.args.get("limit", default=25))
+    limit = int(request.args.get("limit", default=100))
     suggestionsLimit = int(request.args.get("suggestionsLimit", default=0))
     contents = ytmusic.get_playlist(
         playlistId=playlistId, limit=limit, related=True,   suggestions_limit=suggestionsLimit)
@@ -143,6 +149,8 @@ def get_playlist_contents():
 
 @app.route("/get_library_playlists")
 def get_playlist_suggestions():
+
+    limit = int(request.args.get("limit", default=25))
 
     limit = int(request.args.get("limit", default=25))
     suggestions = ytmusic.get_library_playlists(limit=limit)
